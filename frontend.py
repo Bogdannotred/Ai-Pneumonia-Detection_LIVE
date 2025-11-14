@@ -13,6 +13,8 @@ if uploaded_file is not None :
         files = {"file": uploaded_file}
         response = requests.post(backend_url, files = files)
         data = response.json()
+        image_base64 = data.get("image_base64")
+        decodebase64 = base64.b64decode(image_base64)
+        st.image(decodebase64 , caption = "Processed Image")
         st.write(response.status_code)
         st.write("Prediction:", data.get("prediction"))
-        

@@ -47,7 +47,7 @@ def grad_cam(model, img_array, layer_name):
 @app.post("/postai")
 async def postai(file: UploadFile = File(...)):
     img_bytes = await file.read()
-    img = Image.open(io.BytesIO(img_bytes)).convert("RGB")  # force 3 channels
+    img = Image.open(io.BytesIO(img_bytes)).convert("RGB") 
     img = img.resize((224, 224))
     img_array = np.array(img)
     img_array = np.expand_dims(img_array, axis=0) 
@@ -57,7 +57,21 @@ async def postai(file: UploadFile = File(...)):
     heatmap = np.uint8(255 * heatmap)
     heatmap = cv2.applyColorMap(heatmap , cv2.COLORMAP_JET)
 
+    #transform original image into a cv2 img
+    img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+    #take the values from oringinal image and resize it for heatmap
+    heatmap = cv2.resize(heatmap, (img_cv.shape[1], img_cv.shape[0])) 
+    #take the heatmap and superimpose it on original image
+    superimposed_img = cv2.addWeighted(img_cv, 0.6, heatmap, 0.4, 0)
 
+    cv2.imwrite("heatmap.jpg", superimposed_img)
 
-
-    return {"prediction": predictions.tolist()}
+    #save image into memory as .jpg
+    succes , encoded_image = cv2.imencode('.jpg' , superimposed_img)
+    #encode to bytes
+    image_bytes = encoded_image.tobytes()
+    image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+    #send to api
+    return {"prediction": predictions.tolist(),
+            "image_base64": image_base64
+            }
