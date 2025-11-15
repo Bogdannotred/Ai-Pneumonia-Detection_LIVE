@@ -2,20 +2,19 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 
 # Load model
-model = load_model("pneumonia_model.h5")
+model = load_model("best_model.h5")
 
-# Image size your model was trained on
-IMG_SIZE = (224, 224)   # change if you used something else
 
-# Test generator
+IMG_SIZE = (224, 224)  
+
 test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
 
 test_generator = test_datagen.flow_from_directory(
     "for_train_dataset/test/",
     target_size=IMG_SIZE,
     batch_size=32,
-    class_mode='binary',   # or 'categorical' if it was multi-class
-    shuffle=False          # DO NOT shuffle for evaluation
+    class_mode='binary', 
+    shuffle=False     
 )
 
 # Evaluate model
