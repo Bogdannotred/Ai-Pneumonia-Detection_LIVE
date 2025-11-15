@@ -140,9 +140,6 @@ See `requirements.txt` for the complete list of dependencies.
 - The backend and frontend need to run simultaneously
 - Model file (`best_model.h5`) must be present in the project root for the backend to work
 
-## License
-
-[Add your license here]
 
 ## Contributing
 
