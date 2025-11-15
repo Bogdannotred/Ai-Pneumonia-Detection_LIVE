@@ -17,4 +17,6 @@ if uploaded_file is not None :
         decodebase64 = base64.b64decode(image_base64)
         st.image(decodebase64 , caption = "Processed Image")
         st.write(response.status_code)
-        st.write("Prediction:", data.get("prediction"))
+        predictions = data.get("prediction") 
+        pred = predictions[0]
+        st.write(f"Prediciton Pneumonia : {pred[0] * 100:.2f} %")

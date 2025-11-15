@@ -12,11 +12,9 @@ from PIL import Image
 import io
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 
-
-
 app = FastAPI()
 
-# Incarca modelul
+#load model
 model = load_model("best_model.h5")
 
 def grad_cam(model, img_array, layer_name):
@@ -38,11 +36,6 @@ def grad_cam(model, img_array, layer_name):
     heatmap = tf.maximum(heatmap, 0) / (tf.reduce_max(heatmap) + 1e-8)
 
     return heatmap.numpy(), class_idx
-
-
-
-
-
 
 @app.post("/postai")
 async def postai(file: UploadFile = File(...)):
