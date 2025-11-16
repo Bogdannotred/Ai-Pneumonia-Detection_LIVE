@@ -37,38 +37,48 @@ def grad_cam(model, img_array, layer_name):
 
 
 def main():
+    st.set_page_config(page_title="Pneumonia Detection", layout="wide", page_icon="🩺")
+    st.title("🩺 Pneumonia Detection with Grad-CAM")
+
     uploaded_file = st.file_uploader("Choose a image ...", type=['jpg' , 'png'])
     if uploaded_file is not None :
-        if st.button("Process"):
-            bytes_data = uploaded_file.getvalue()
-            img = Image.open(io.BytesIO(bytes_data)).convert("RGB") 
-            img = img.resize((224, 224))
-            img_array = np.array(img)
-            img_array = np.expand_dims(img_array, axis=0) 
-            img_array = preprocess_input(img_array)
-            predictions = model.predict(img_array)
-            heatmap, class_idx = grad_cam(model , img_array , 'conv5_block16_concat')
-            heatmap = np.uint8(255 * heatmap)
-            heatmap = cv2.applyColorMap(heatmap , cv2.COLORMAP_JET)
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                if st.button("🩺 Process Image", use_container_width=True):
+                    with st.spinner("Processing..."):
+                        bytes_data = uploaded_file.getvalue()
+                        img = Image.open(io.BytesIO(bytes_data)).convert("RGB") 
+                        img = img.resize((224, 224))
+                        img_array = np.array(img)
+                        img_array = np.expand_dims(img_array, axis=0) 
+                        img_array = preprocess_input(img_array)
+                            
+                        predictions = model.predict(img_array)
+                        heatmap, class_idx = grad_cam(model , img_array , 'conv5_block16_concat')
+                        heatmap = np.uint8(255 * heatmap)
+                        heatmap = cv2.applyColorMap(heatmap , cv2.COLORMAP_JET)
 
-            #transform original image into a cv2 img
-            img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-            #take the values from oringinal image and resize it for heatmap
-            heatmap = cv2.resize(heatmap, (img_cv.shape[1], img_cv.shape[0])) 
-            #take the heatmap and superimpose it on original image
-            superimposed_img = cv2.addWeighted(img_cv, 0.6, heatmap, 0.4, 0)
+                        #transform original image into a cv2 img
+                        img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+                        #take the values from oringinal image and resize it for heatmap
+                        heatmap = cv2.resize(heatmap, (img_cv.shape[1], img_cv.shape[0])) 
+                        #take the heatmap and superimpose it on original image
+                        superimposed_img = cv2.addWeighted(img_cv, 0.6, heatmap, 0.4, 0)
 
-            cv2.imwrite("heatmap.jpg", superimposed_img)
+                        cv2.imwrite("heatmap.jpg", superimposed_img)
 
-            #save image into memory as .jpg
-            succes , encoded_image = cv2.imencode('.jpg' , superimposed_img)
-            #encode to bytes
-            image_bytes = encoded_image.tobytes()
-            image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+                        #save image into memory as .jpg
+                        succes , encoded_image = cv2.imencode('.jpg' , superimposed_img)
+                        #encode to bytes
+                        image_bytes = encoded_image.tobytes()
+                        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
-            decodebase64 = base64.b64decode(image_base64)
-            st.image(decodebase64 , caption = "Processed Image")
-            pred = predictions[0]
-            st.write(f"Prediction Pneumonia : {pred[0] * 100:.2f} %")
+                        decodebase64 = base64.b64decode(image_base64)
+                        #display image with gradcam
+                        st.image(decodebase64 , caption = "Processed Image")
+                        #display normal image
+                        st.image(img , caption = "Original Image")
+                        pred = predictions[0]
+                        st.write(f"Prediction Pneumonia : {pred[0] * 100:.2f} %")
 
 main()
