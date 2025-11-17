@@ -14,9 +14,12 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 import streamlit as st
 
 
+#save it in cache for better performance
+@st.cache_resource
+def load_model_cache():
+    return load_model("final_pneumonia_model.h5")
 
-#load model
-model = load_model("final_pneumonia_model.h5")
+
 def grad_cam(model, img_array, layer_name):
     grad_model = tf.keras.models.Model(
         inputs=model.input,
