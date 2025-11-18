@@ -4,7 +4,7 @@ import cv2
 from PIL import Image
 import io
 
-def grad_cam(model, img_array, layer_name):
+def grad_cam(model, img_array, layer_name , img):
     grad_model = tf.keras.models.Model(
         inputs=model.input,
         outputs=[model.get_layer(layer_name).output, model.output]
@@ -22,9 +22,6 @@ def grad_cam(model, img_array, layer_name):
     heatmap = tf.squeeze(heatmap)
     heatmap = tf.maximum(heatmap, 0) / (tf.reduce_max(heatmap) + 1e-8)
 
-    return heatmap.numpy(), class_idx
-
-def over_heatmap(img, heatmap):
     heatmap = np.uint8(255 * heatmap)
 
     heatmap = cv2.applyColorMap(heatmap , cv2.COLORMAP_JET)
@@ -36,4 +33,6 @@ def over_heatmap(img, heatmap):
     superimposed_image = cv2.addWeighted(img_cv, 0.6, heatmap, 0.4, 0)
 
     return superimposed_image
+
+
 
