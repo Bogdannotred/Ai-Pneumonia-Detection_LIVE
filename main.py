@@ -42,6 +42,7 @@ def grad_cam(model, img_array, layer_name):
 
 
 def main():
+    model =load_model_cache()
     st.set_page_config(page_title="Pneumonia Detection", layout="wide", page_icon="🩺")
     st.title("🩺 Pneumonia Detection with Grad-CAM")
     uploaded_file = st.file_uploader("Choose a image ...", type=['jpg' , 'png'])
