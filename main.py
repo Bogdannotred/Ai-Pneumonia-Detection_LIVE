@@ -15,7 +15,7 @@ import streamlit as st
 
 
 from gradcam_visual import grad_cam
-from gradcam_visual import heatmap
+from gradcam_visual import over_heatmap
 
 #save it in cache for better performance
 @st.cache_resource
@@ -43,12 +43,11 @@ def main():
                             img_array = preprocess_input(img_array)
                             predictions = model.predict(img_array)
                             heatmap, class_idx = grad_cam(model , img_array , 'conv5_block16_concat')
-                            superimposed_img = heatmap(img , heatmap)
-                            #save image to file
-                            cv2.imwrite("heatmap.jpg", superimposed_img)
+                            superimposed_image = over_heatmap(img , heatmap)
+                            cv2.imwrite("heatmap.jpg", superimposed_image)
 
                             #save image into memory as .jpg
-                            succes , encoded_image = cv2.imencode('.jpg' , superimposed_img)
+                            succes , encoded_image = cv2.imencode('.jpg' , superimposed_image)
                             #encode to bytes
                             image_bytes = encoded_image.tobytes()
                             image_base64 = base64.b64encode(image_bytes).decode('utf-8')
