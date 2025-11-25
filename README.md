@@ -2,7 +2,7 @@
 
 **Version: 0.4** ⚠️ **Work in Progress - Not Production Ready**
 
-## Test the beta version here : https://bogdannotred-ai-pneumonia-detection-main-j0ko4o.streamlit.app
+## Test the beta version here : https://ai-pneumonia-detection.streamlit.app/
 
 ![Alt text](https://github.com/Bogdannotred/Ai-Pneumonia-Detection/blob/main/project_photos/projectphoto.png)
 
