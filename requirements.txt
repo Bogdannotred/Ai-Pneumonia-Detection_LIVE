@@ -1,9 +1,13 @@
-fastapi==0.115.0
+fastapi==0.115.4
 uvicorn==0.32.0
-tensorflow==2.20.0
-numpy>=2.1.0
-opencv-python==4.12.0.88
-matplotlib==3.9.4
-pillow==11.3.0
-streamlit==1.50.0
-requests==2.32.5
+# Using TF 2.18 (latest stable). 2.20 does not exist.
+tensorflow==2.18.0
+# TF often requires numpy < 2.0. This prevents build errors.
+numpy<2.0.0
+# Use headless OpenCV for Cloud deployment to avoid libGL errors
+opencv-python-headless==4.10.0.84
+matplotlib==3.9.2
+pillow==11.0.0
+# 1.50 does not exist yet
+streamlit==1.40.1
+requests==2.32.3
