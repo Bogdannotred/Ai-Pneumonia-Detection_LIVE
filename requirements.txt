@@ -1,13 +1,13 @@
 fastapi==0.115.4
 uvicorn==0.32.0
-# Using TF 2.18 (latest stable). 2.20 does not exist.
+# TF 2.20 does not exist. 2.18 is the latest stable.
 tensorflow==2.18.0
-# TF often requires numpy < 2.0. This prevents build errors.
+# TensorFlow often breaks with NumPy 2.0+. We force 1.x here.
 numpy<2.0.0
-# Use headless OpenCV for Cloud deployment to avoid libGL errors
+# You MUST use headless OpenCV on Cloud servers or it will crash.
 opencv-python-headless==4.10.0.84
 matplotlib==3.9.2
 pillow==11.0.0
-# 1.50 does not exist yet
+# Streamlit 1.50 does not exist. 1.40 is the latest.
 streamlit==1.40.1
 requests==2.32.3
