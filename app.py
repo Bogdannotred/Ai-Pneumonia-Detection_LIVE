@@ -152,5 +152,4 @@ def main():
                     st.image(img, caption="Original Image", use_container_width=True)
                 with res_col2:
                     st.image(superimposed_image_rgb, caption="Grad-CAM Analysis (Areas of Interest)", use_container_width=True) 
-if __name__ == "__main__":
-    main()
+main()
