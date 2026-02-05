@@ -76,7 +76,7 @@ def main():
         st.warning(
             "⚠️ **Medical Disclaimer**\n\n"
             "This tool is strictly for educational/demonstrative purposes. "
-            "It should not be used as a substitute for professional medical diagnosis."
+            "It should not be used as a substitute for professional medical diagnosis"
         )
 
     #Main Area
